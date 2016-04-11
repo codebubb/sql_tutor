@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+    <title>SQL Query Practice</title>
+
+  </head>
+  <body>
+
+    <textarea id="query" cols="30" rows="10"></textarea>
+    <button id="execute">Execute</button>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+      // When execute is clicked
+      $('#execute').on('click', function(){
+        socket.emit('query execute', $('#query').val());
+        return false;
+      });
+
+      // When user types
+      $('#query').on('input', function(){
+        socket.emit('query display', $('#query').val());
+        return false;
+      });
+
+      // socket.on('chat message', function(msg){
+      //   $('#messages').append($('<li>').text(msg));
+      // });
+    </script>
+  </body>
+</html>
