@@ -1,6 +1,6 @@
 var server =  require('../index.js');
 var request = require('request');
-//var fake_client = require('socket.io-client');
+var fake_client = require('socket.io-client');
 
 describe("when server is running",function () {
   it("should serve an index page", function(done){
@@ -9,36 +9,47 @@ describe("when server is running",function () {
         done();
       });
   });
-});
-  //
-  // it("should listen for connections", function () {
-  //   expect(server.io).toBeDefined();
-  // });
-  // describe("when listening for messages", function(){
-  //   var socket;
-  //
-  //   beforeEach(function(done){
-  //     socket = fake_client.connect('http://' + server.ip + ":" + server.port, {'transports' : ['websocket'], 'reconnection delay' : 0, 'reopen delay' : 0, 'force new connection' : true});
-  //
-  //    socket.on('connect', function(){
-  //      console.log("Fake_Client:::Connect");
-  //      done();
-  //    });
-  //   });
-  //
-  //   afterEach(function(done){
-  //     if(socket.connected){
-  //       console.log("Fake_Client:::Disconnect");
-  //       socket.disconnect();
-  //     }
-  //     done();
-  //   });
-  //
-  //   it("should receive messages on socket", function(){
-  //     console.log("Testing for clients");
-  //    expect(server.io.sockets.clients()).toBeTruthy();
-  //    expect(server.io.of('/').clients().length).toBeEqual(1);
-  //   });
-  // });
+  
+  it("should listen for connections", function () {
+    expect(server.io).toBeDefined();
+  });
 
-//});
+
+  describe("when listening for messages", function(){
+    var socket;
+  
+    beforeEach(function(done){
+      expect(Object.keys(server.io.sockets.connected).length).toBe(0);
+      socket = fake_client.connect('http://' + server.ip + ":" + server.port, {'transports' : ['websocket'], 'reconnection delay' : 20, 'reopen delay' : 0, 'forceNew' : true});
+  
+     socket.on('connect', function(){
+       console.log("Fake_Client:::Connect");
+       done();
+     });
+     socket.on('disconnect', function(){
+      
+     });
+    });
+  
+    afterEach(function(done){
+      if(socket.connected){
+        
+        socket.disconnect();
+
+        console.log("Fake_Client:::Disconnect");
+        done();
+        
+        expect(socket.connected).toEqual(false);
+        
+      }
+
+      
+    });
+  
+    it("should receive messages on socket", function(done){
+     expect(Object.keys(server.io.sockets.connected).length).toBe(1);
+     done();
+    });
+  });
+
+});
