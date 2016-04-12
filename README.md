@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/codebubb/sql_practice.svg?branch=master)](https://travis-ci.org/codebubb/sql_practice)
 # SQL Practice
 
 An application to monitor students in a classroom writing SQL queries.  Users log in to a main portal by entering their name which spins up a copy of a pre-made SQLite database.  The users can then run queries and see their individual results against the database.  
