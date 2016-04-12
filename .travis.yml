@@ -1,0 +1,4 @@
+language: node_js
+script: ./node_modules/.bin/jasmine-node spec
+before_script:
+    - "npm i -g jasmine-node"
