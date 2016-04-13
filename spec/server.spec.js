@@ -28,8 +28,11 @@ describe("when server is running",function () {
   });
 
   it("should copy a database file when the user logs in", function(){
-    login('test-user');
-    // expect file exists <date>_test-user.db
+    server.login('test-user');
+    expect(server.fs.stat('sessions/test-user.db', function(err, stats){
+      expect(err).toBeFalsy();
+      expect(stats).toBeTruthy();
+    }));
   });
 
   it("should listen for connections", function () {
