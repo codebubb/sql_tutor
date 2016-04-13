@@ -1,0 +1,47 @@
+*{
+  box-sizing: border-box;
+}
+
+body{
+  font-family: 'Roboto', sans-serif;
+  background-color: rgb(110, 27, 57);
+}
+
+.banner{
+
+}
+
+.banner .container{
+  width: 60vw;
+  margin: 0 auto;
+  margin-top: 100px;
+  text-align: center;
+}
+
+.banner .container h1{
+  font-size: 2em;
+  color: white;
+  font-weight: 500;
+}
+
+.login{
+}
+.login .container{
+  width: 60vw;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 100px;
+}
+.login .container input{
+  text-align: center;
+  border: none;
+  color: white;
+  font-weight: 700;
+  font-size: 5em;
+  background-color: rgb(110, 27, 57);
+  width: 100%;
+}
+
+.login .container input:focus{
+  outline: none;
+}
