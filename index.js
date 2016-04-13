@@ -1,11 +1,14 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var fs = require('fs.extra');
+
 var ip = 'localhost';
 var port = 3000;
 module.exports = {
   "app": app,
   "http": http,
+  "fs": fs,
   "io": io,
   "ip": ip,
   "port": port
