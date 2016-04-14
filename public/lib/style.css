@@ -47,7 +47,9 @@ body{
 }
 
 /*Lesson page styles*/
-#editor, .results{
-  width: 50%;
+.col{
+  display: inline-block;
+  vertical-align: top;
+  width: 49%;
   padding: 30px;
 }

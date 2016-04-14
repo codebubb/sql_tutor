@@ -1,2 +1,22 @@
-<h2>SQL Tutor</h2>
-{{{body}}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="/lib/codemirror.js"></script>
+  <script src="/lib/mode/sql/sql.js"></script>
+  <link rel="stylesheet" href="/lib/codemirror.css">
+  <link rel="stylesheet" href="lib/style.css">
+  <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+</head>
+<body>
+  <h2>SQL Tutor</h2>
+  {{{body}}}
+  <script>
+    //$(function(){
+      var myCodeMirror = CodeMirror(document.querySelector('#editor'), {
+      mode: "text/x-mysql",
+      lineNumbers: true
+      });
+    //});
+  </script>
+</body>
+</html>

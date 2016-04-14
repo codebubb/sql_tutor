@@ -2,8 +2,8 @@
 <html>
   <head>
     <title>SQL Query Practice</title>
-    <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'> -->
-    <link rel="stylesheet" href="/style.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="lib/style.css">
     <meta name="viewport" content="width=device-width,intial-scale=1.0">
   </head>
   <body>
@@ -15,7 +15,7 @@
 
     <div class="login">
       <div class="container">
-        <form method="POST">
+        <form id="login" method="POST" autocomplete="off">
           <input type="text" name="username" placeholder="Enter your name...">
         </form>
       </div>
@@ -23,5 +23,17 @@
 
 
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      $(function(){
+        $('input').focus();
+        $('#login').on('submit', function(e){
+          if($('input').val() == ""){
+            e.preventDefault();
+            alert('Please enter a name');
+          }
+
+        });
+      });
+    </script>
   </body>
 </html>

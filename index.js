@@ -1,4 +1,5 @@
-var app = require('express')();
+var express = require('express');
+var app = express()
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var fs = require('fs-extra');
@@ -10,16 +11,19 @@ var ip = 'localhost';
 var port = 3000;
 
 var users = {};
+var sourcedb = 'sample.db'
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
+app.use(express.static('public'));
 
 var login = function(username, callback){
   // Async login
   var sessionid = make_sessionid(6);
-  users[sessionid] = {"name": username};
-  fs.copy('data/sample.db', 'sessions/' + sessionid + '_' + username + '.db', function(err){
+  var dbfile = 'sessions/' + sessionid + '_' + username + '.db';
+  users[sessionid] = {"name": username, "dbfile": dbfile};
+  fs.copy('data/' + sourcedb, dbfile, function(err){
     callback(err || sessionid);
   });
 }
@@ -36,13 +40,9 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/style.css', function(req, res){
-  res.sendFile(__dirname + '/style.css');
-});
 
-app.get('/:lessonid/:sessionid', function(req, res){
+app.get('/:sessionid', function(req, res){
   var data = {
-    "lesson": 1,
     "user": users[req.params.sessionid]
   }
   res.render('lesson', data);
@@ -50,10 +50,9 @@ app.get('/:lessonid/:sessionid', function(req, res){
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.post('/', function(req, res){
-  console.log("req:" + req.body);
   if(req.body.username !== ""){
     login(req.body.username, function(sessionid){
-      res.redirect('/lesson1/' + sessionid);
+      res.redirect('/' + sessionid);
     });
   }
 });
