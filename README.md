@@ -8,10 +8,11 @@ Icing on the cake is that a tutor can connect as admin and then view all of the 
 
 To do:
 
-  * [] Portal page
+  * [] Persist list of sessions over server restart
+  * [x] Portal page
   * [] Handle differentiation between Admin / User
   * [] Implement SQL query run
-  * [] Implement Copy of SQLite database on connection
+  * [x] Implement Copy of SQLite database on connection
   * [] UI
 
 

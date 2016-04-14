@@ -39,6 +39,11 @@ describe("when server is running",function () {
       }, 1);
     });
 
+    it("should save the user to the global var", function(done){
+      expect(Object.keys(server.users).length).toBe(1);
+      done();
+    });
+
     it("should copy a database file", function(done){
       expect(sessionid.length).toBe(6);
       server.fs.stat('sessions/' + sessionid + '_testuser.db', function(err, stats){
