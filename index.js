@@ -9,10 +9,20 @@ var ip = 'localhost';
 var port = 3000;
 
 
-var login = function(username){
-  fs.copy('data/sample.db', 'sessions/' + username + '.db' , function(err){
-    if (err) return console.error(err);
+var login = function(username, callback){
+  // Async login
+  var sessionid = make_sessionid(6);
+  fs.copy('data/sample.db', 'sessions/' + sessionid + '_' + username + '.db', function(err){
+    callback(err || sessionid);
   });
+}
+
+function make_sessionid(length){
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    for( var i=0; i < length; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
 }
 
 app.get('/', function(req, res){
@@ -23,9 +33,10 @@ app.get('/style.css', function(req, res){
   res.sendFile(__dirname + '/style.css');
 });
 
-app.get('/:user', function(req, res){
+app.get('/:lesson/:session', function(req, res){
   res.sendFile(__dirname + '/lesson.html');
 });
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.post('/', function(req, res){
   console.log("req:" + req.body);

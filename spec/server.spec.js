@@ -20,19 +20,34 @@ describe("when server is running",function () {
   });
 
   it("should serve a user page", function(done){
-      request.get('http://' + server.ip + ':' + server.port + '/test-user', function(error, response, body){
+      request.get('http://' + server.ip + ':' + server.port + '/lesson1/xYzAbC', function(error, response, body){
         expect(error).toBeFalsy();
         expect(response.statusCode).toEqual(200);
         done();
       });
   });
 
-  it("should copy a database file when the user logs in", function(){
-    server.login('test-user');
-    expect(server.fs.stat('sessions/test-user.db', function(err, stats){
-      expect(err).toBeFalsy();
-      expect(stats).toBeTruthy();
-    }));
+  describe("when a user submits the form", function(){
+    var sessionid;
+    beforeEach(function(done){
+      // Set the sessionid for the other tests
+      setTimeout(function(){
+        server.login('testuser', function(sid){
+          sessionid = sid;
+          done();
+        });
+      }, 1);
+    });
+
+    it("should copy a database file", function(done){
+      expect(sessionid.length).toBe(6);
+      server.fs.stat('sessions/' + sessionid + '_testuser.db', function(err, stats){
+        expect(err).toBeFalsy();
+        expect(stats).toBeTruthy();
+        done();
+      });
+    });
+
   });
 
   it("should listen for connections", function () {
