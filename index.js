@@ -4,7 +4,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var fs = require('fs-extra');
 var sqlite3 = require('sqlite3');
-
+var async = require('async');
 
 var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
@@ -18,6 +18,7 @@ var sourcedb = 'sample.db'
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 app.use(express.static('public'));
 
@@ -51,22 +52,35 @@ app.get('/:sessionid', function(req, res){
   res.render('lesson', data);
 });
 
-app.post('/:sessionid/execute', function(req, res){
-  var query = req.body.query;
+var get_results = function(statements, callback){
   var db = new sqlite3.Database('data/sample.db');
   db.serialize(function() {
-    db.all(query, function(err, rows) {
+    async.concat(statements, function(stmt, callback){
+      db.all(stmt, function(err, rows) {
       if(err){
         var errmsg = "" + err;
-        err["errmsg"] = errmsg;
-        console.log(err);
-        res.json(err)
+        var rtnerr = {}
+        rtnerr["errmsg"] = errmsg;
+        rtnerr["errno"] = errmsg["errno"];
+        rtnerr["code"] = errmsg["code"];
+        callback(null, new Array(new Array(rtnerr)));
       } else{
-
-        res.json(rows);
+        callback(null, new Array(rows));
       }
-      });
+    });
+  }, function(err, results){
+      callback(results);
+    })
+});
+}
+
+app.post('/:sessionid/execute', function(req, res){
+  var query = req.body.query;
+  get_results(query, function(results){
+    res.json(results);
   });
+
+
 });
 
 app.post('/', function(req, res){

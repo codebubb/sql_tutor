@@ -15,33 +15,44 @@
 
 <script>
   $('#execute').on('click', function(){
+    var lines = [];
+    for(var i=0; i<editor.lineCount(); i++){
+      if(editor.getLine(i)){
+        lines.push(editor.getLine(i));
+      }
+    }
+    console.log(lines);
     $.ajax({
       url: window.location.pathname + '/execute',
       dataType: "json",
       method: "POST",
-      data: {query: editor.getValue() }
+      data: {query: lines }
     })
 
       .done(function(data){
         console.log(data);
-        if ("errno" in data){
-          $('#results').html("<div class=\"error\">Ooops! Something went wrong with your query!" + data.errmsg + " </div>");
-
-        } else{
-        var results = "<table><tr>";
-        var headings = Object.keys(data[0]);
-        for (h in headings){
-          results += "<th>" + headings[h] + "</th>";
-        }
-        results += "</tr>";
-        for (row in data){
-          results += "<tr>"
-          for (col in data[row]){
-            results += "<td>" + data[row][col] + "</td>"
+        $('#results').html("");
+        for(d in data){
+          var table = data[d];
+          var results = "<table><tr>";
+          var headings = Object.keys(table[0]);
+          if (headings.indexOf("errmsg") > -1){
+            results = "<p class=\"error\">" + table[0]["errmsg"] + "</p>";
+          } else{
+          for (h in headings){
+            results += "<th>" + headings[h] + "</th>";
           }
           results += "</tr>";
+          for (row in table){
+            results += "<tr>"
+            for (col in table[row]){
+              results += "<td>" + table[row][col] + "</td>"
+            }
+            results += "</tr>";
+          }
         }
-        $('#results').html(results);
+          results += "</table>";
+          $('#results').append(results);
       }
       })
       .fail(function(error){
